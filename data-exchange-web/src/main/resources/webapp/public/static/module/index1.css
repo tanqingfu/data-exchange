@@ -1,0 +1,88 @@
+.content {
+    height: 100%;
+    background-color: #ECF1F5;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.content h3 {
+    margin-top: 20px;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.content-table {
+    /*margin-top: 20px;*/
+    padding: 40px;
+    /*padding-bottom:160px;*/
+    background: #fff;
+}
+
+.layui-input {
+    min-width: 200px;
+    max-width: 100%;
+}
+
+.layui-btn-primary {
+    border-radius: 5px;
+    border: 1px solid #3986F4;
+    color: #3986F4;
+}
+
+.layui-btn {
+    background-color: #3986F4;
+}
+
+.btn {
+    border-radius: 5px;
+    border: 1px solid #999;
+    color: #999;
+}
+
+.button {
+    margin-left: 20px;
+}
+
+.s-btn {
+    background-color: #3986F4;
+    border-radius: 5px;
+}
+
+.right-btn {
+    /*padding-top: 40px;*/
+}
+
+.layui-form-item .layui-input-inline {
+    /*width: 0;*/
+}
+
+.content-input {
+
+}
+.content-input .layui-form-item {
+    padding: 0;
+    margin: 0;
+    clear: none;
+}
+.content-input > *{
+    display: inline-block;
+    vertical-align: top;
+}
+
+.table {
+    margin-top: 20px;
+    /*padding-top: 100px;*/
+}
+
+.layui-table thead tr {
+    background-color: #F1F5F8;
+}
+
+.layui-table-cell span {
+    color: #999;
+}
+
+.page {
+    margin-top: 40px;
+    text-align: right;
+}

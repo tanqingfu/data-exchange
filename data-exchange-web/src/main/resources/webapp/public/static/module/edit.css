@@ -1,0 +1,13 @@
+.input{
+    border:1px solid rgba(0,0,0,0);
+}
+.edit-btn{
+    position: absolute;
+    left: 800px;
+    bottom: 100px;
+}
+.next{
+    width: 90px;
+    height: 50px;
+    border-radius: 5px;
+}

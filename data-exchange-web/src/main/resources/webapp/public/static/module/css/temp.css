@@ -1,0 +1,79 @@
+.content{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+.easyui-layout {
+    width: 100%;
+    height: 100%;
+}
+
+.left, .right {
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
+.cent {
+    float: left;
+    width: 0%;
+    height: 100%;
+}
+
+.rtitle {
+    padding: 5px;
+}
+
+.channel-user,.channel-city {
+    padding: 0 7px;
+    line-height: 28px;
+}
+
+.dialog-button {
+    text-align: center;
+}
+
+.easyui-dialog {
+    padding: 10px;
+}
+
+.easyui-dialog > div {
+    margin: 10px 0;
+}
+
+.easyui-dialog > div label {
+    width: 130px;
+    text-align: right;
+    display: inline-block;
+}
+
+.footer {
+    overflow: hidden;
+    height: 100%;
+}
+
+.footer.hidden {
+    display: none !important;
+}
+
+.footer .headline {
+    line-height: 30px;
+    background: #f4f4f4;
+    padding: 0 10px;
+}
+
+.footer .cent {
+    height: 70px;
+    overflow-y: auto;
+    line-height: 20px;
+    padding: 0 10px;
+}
+
+.footer .easyui-tabs {
+    width: 100%;
+    height: 100%;
+}
+
+.footer .easyui-tabs .tabs-panels {
+    padding: 10px;
+}

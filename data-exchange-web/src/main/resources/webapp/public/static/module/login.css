@@ -1,0 +1,85 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    width: 100%;
+    height: 100%;
+    background: url('../image/login.png') no-repeat;
+}
+.box{
+    width: 520px;
+    height: 564px;
+    background-color: #fff;
+    position: relative;
+    left: 1100px;
+    top:193px;
+    padding: 95px 0;
+    padding-left: 55px;
+    box-sizing: border-box;
+}
+.box img{
+    position: absolute;
+    top: -44px;
+    left: 130px;
+}
+.content img{
+    position: absolute;
+    top: 101px;
+    left: 115px;
+}
+.content h2{
+    margin-left: 166px;
+    color: #3986F4;
+    font-size: 28px;
+}
+.content-input input{
+    border: none;
+    width: 410px;
+    height: 40px;
+    border-bottom: 1px solid #ccc;
+    outline:none;
+    margin-top: 70px;
+    padding-left: 20px;
+    font-size: 16px;
+}
+.content-input input::-webkit-input-placeholder{
+    color: #CFCECE;
+}
+.content-input input::-moz-input-placeholder{
+    color: #CFCECE;
+}
+.content-input input::-ms-input-placeholder{
+    color: #CFCECE;
+}
+.content-input .password{
+    margin-top: 50px;
+}
+.content .code{
+    width: 174px;
+    float: left;
+}
+.content a{
+    color: #3986F4;
+    text-decoration: none;
+    font-size: 14px;
+}
+.content .code-box{
+    width: 130px;
+    height: 49px;
+    border: 1px solid #999;
+    border-radius: 4px;
+    margin-left: 210px;
+}
+button{
+    width: 390px;
+    height: 76px;
+    background-color: #3986F4;
+    border-radius: 36px;
+    border: none;
+    position: absolute;
+    bottom: -33px;
+    left: 65px;
+    color: #fff;
+    font-size: 26px;
+}

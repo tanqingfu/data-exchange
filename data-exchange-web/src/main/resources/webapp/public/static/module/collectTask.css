@@ -1,0 +1,33 @@
+.msg-box ul li{
+    float:left;
+    width:26%;
+    text-align:center;
+    margin-top:20px;
+
+}
+.content-table h3{
+    margin-bottom:30px;
+}
+.msg-name{
+    display:inline-block;
+    width:30%;
+    text-align:right;
+}
+.describe-title{
+    width:16%;
+    float:left;
+}
+.msg-box .describe-box{
+    width:100%
+}
+.describe{
+    float:left;
+    height:60px;
+    width:80%;
+    display:block;
+    background-color:#FAFBFD;
+    text-align:left
+}
+.field-msg h3{
+    margin-bottom:0
+}

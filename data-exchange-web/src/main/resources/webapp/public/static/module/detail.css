@@ -1,0 +1,10 @@
+.layui-form-item{
+    clear: both;
+    width: 100%;
+}
+.layui-form-label{
+    width:17%;
+}
+.layui-input{
+    width: 80%;
+}

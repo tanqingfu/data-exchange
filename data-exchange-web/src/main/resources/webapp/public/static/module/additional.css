@@ -1,0 +1,24 @@
+.additional-box,
+.additional-box1{
+    width: 30%;
+    height: 40%;
+    margin-left: -136px;
+    background-color: #F1F5F8;
+}
+.additional-box1{
+    margin-left: 60px;
+    /*text-align: center;*/
+}
+.additional-box h4,
+.additional-box1 h4{
+    font-size: 20px;
+    text-align: center;
+    margin:30px 0;
+}
+.demo-tree{
+    margin-left: 139px;
+    color: #333;
+}
+.layui-unselect{
+    display: none;
+}

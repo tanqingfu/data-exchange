@@ -1,0 +1,64 @@
+.content h4 span{
+    color: #999;
+}
+.add-from{
+    margin-top: 20px;
+    /*height: 876px;*/
+    /*min-height: 100%;*/
+    background-color: #fff;
+    padding: 40px;
+    text-align:center;
+    /*overflow: auto;*/
+}
+.layui-form-item{
+    clear: both;
+}
+.layui-input{
+    width: 500px;
+    height: 50px;
+    /*margin-left: 50px;*/
+    border: 1px solid #d2d2d2;
+    /*color: #999;*/
+}
+.layui-form-label{
+    width: 115px;
+    line-height: 30px;
+}
+.layui-form select{
+    display: block;
+    width: 500px;
+    height: 50px;
+    margin-left: 50px;
+    border: 1px solid #d2d2d2;
+    /*color: #999;*/
+}
+.add-box{
+    /*height: 760px;*/
+    padding-left: 37%;
+}
+.add-btn{
+    margin-top: 100px;
+    margin-left: 790px;
+    /*position: absolute;*/
+    /*bottom: 40px;*/
+    /*left: 690px;*/
+}
+.add-input{
+    text-align:center;
+    height:50px;
+}
+.add-input span{
+    float:left;
+}
+.layui-btn-normal{
+    background-color: #3A86F4;
+}
+.layui-btn-primary{
+    background-color: rgba(0,0,0,0);
+}
+.layui-input{
+    width: 84%;
+}
+.layui-form-select .layui-edge{
+    right:35px
+}
