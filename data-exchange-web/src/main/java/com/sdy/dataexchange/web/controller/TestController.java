@@ -21,6 +21,7 @@ public class TestController extends BaseController {
 
     @RequestMapping(value = "/page",method =  RequestMethod.GET)
     public  String test(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        request.setAttribute("age",52);
         return  "/page/test/test";
     }
 }

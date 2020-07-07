@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
+    <property name="LOG_HOME" value="/home/log/data-exchange"/>
+    <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+    <property name="PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{_ip}] [%thread] %-5level %logger[%file:%line] - %msg%n"/>
+
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+    <property name="CONSOLE_LOG_PATTERN"
+              value="${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([%X{_ip}]){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr([%30.30file:%-4.4line]){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+    <property name="FILE_LOG_PATTERN"
+              value="${FILE_LOG_PATTERN:-%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} ${LOG_LEVEL_PATTERN:-%5p} [%X{_ip}] [%t] %-40.40logger{39} [%30.30file:%-4.4line] : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+
+    <!-- 控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <!-- 按照每天生成日志文件 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <FileNamePattern>${LOG_HOME}/data-exchange.log.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <!--日志文件保留天数-->
+            <MaxHistory>90</MaxHistory>
+            <MaxFileSize>1024MB</MaxFileSize>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <!--sql语句打印-->
+<!--    <logger name="druid.sql.Statement" level="DEBUG" additivity="false">-->
+<!--        <appender-ref ref="STDOUT" />-->
+<!--        <appender-ref ref="FILE" />-->
+<!--    </logger>-->
+    <!--1. sql语句打印-->
+    <!--<logger name="org.hibernate.SQL" level="DEBUG" additivity="false">-->
+        <!--<appender-ref ref="STDOUT"/>-->
+        <!--<appender-ref ref="FILE"/>-->
+    <!--</logger>-->
+    <!--&lt;!&ndash; 2. 输出SQL的参数到控制台和文件&ndash;&gt;-->
+    <!--<logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="false">-->
+        <!--<appender-ref ref="STDOUT"/>-->
+        <!--<appender-ref ref="FILE"/>-->
+    <!--</logger>-->
+    <!-- 日志输出级别 -->
+    <root level="INFO">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>
