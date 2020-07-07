@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdy.dataexchange.biz.mapper.ExDbMappingMapper">
+    <select id="getMapping" resultType="com.sdy.dataexchange.biz.model.DbMappingResult">
+         SELECT
+            gt.gather_desc gatherDesc
+            ,gt.gather_id gatherId
+             ,db1.db_id sourceDbId
+        ,db1.db_desc AS 'sourceDb'
+        ,db1.db_name sourceDbName
+        ,db1.db_ip sourceDbIp
+        ,db1.db_port sourceDbPort
+        ,db1.db_user sourceDbUser
+         ,db2.db_id destDbId
+        ,db2.db_desc AS 'destDb'
+        ,db2.db_name destDbName
+        ,db2.db_ip destDbIp
+        ,db2.db_port destDbPort
+        ,db2.db_user destDbUser
+        ,dbm.create_time createTime
+        ,dbm.modify_time modifyTime
+        ,dbm.valid_flag validFlag
+        ,dbm.id
+        FROM
+        ex_db_mapping dbm
+        LEFT JOIN ex_db_dict db1 ON dbm.source_dbid = db1.db_id
+        LEFT JOIN ex_db_dict db2 ON dbm.dest_dbid = db2.db_id
+        LEFT JOIN ex_gather_dict gt ON dbm.gather_id = gt.gather_id
+        order by dbm.create_time DESC
+    </select>
+    <select id="getByDbName" resultType="com.sdy.dataexchange.biz.model.DbMappingResult">
+         SELECT
+            gt.gather_desc gatherDesc
+            ,gt.gather_id gatherId
+            ,db1.db_id sourceDbId
+        ,db1.db_desc AS 'sourceDb'
+        ,db1.db_name sourceDbName
+        ,db1.db_ip sourceDbIp
+        ,db1.db_port sourceDbPort
+        ,db1.db_user sourceDbUser
+         ,db2.db_id destDbId
+        ,db2.db_desc AS 'destDb'
+        ,db2.db_name destDbName
+        ,db2.db_ip destDbIp
+        ,db2.db_port destDbPort
+        ,db2.db_user destDbUser
+        ,dbm.create_time createTime
+        ,dbm.modify_time modifyTime
+        ,dbm.valid_flag validFlag
+        ,dbm.id
+        FROM
+        ex_db_mapping dbm
+        LEFT JOIN ex_db_dict db1 ON dbm.source_dbid = db1.db_id
+        LEFT JOIN ex_db_dict db2 ON dbm.dest_dbid = db2.db_id
+        LEFT JOIN ex_gather_dict gt ON dbm.gather_id = gt.gather_id
+        where db1.db_name=#{dbName} or db2.db_name=#{dbName}
+        order by dbm.create_time DESC
+    </select>
+<select id="getTotle" resultType="java.lang.Integer">
+      SELECT
+        count(*)
+        FROM
+        ex_db_mapping dbm
+        LEFT JOIN ex_db_dict db1 ON dbm.source_dbid = db1.db_id
+        LEFT JOIN ex_db_dict db2 ON dbm.dest_dbid = db2.db_id
+        LEFT JOIN ex_gather_dict gt ON dbm.gather_id = gt.gather_id
+</select>
+    <select id="getResult" resultType="java.lang.Integer">
+          SELECT
+        count(*)
+        FROM
+        ex_db_mapping dbm
+        LEFT JOIN ex_db_dict db1 ON dbm.source_dbid = db1.db_id
+        LEFT JOIN ex_db_dict db2 ON dbm.dest_dbid = db2.db_id
+        LEFT JOIN ex_gather_dict gt ON dbm.gather_id = gt.gather_id
+        where db1.db_name=#{dbName} or db2.db_name=#{dbName}
+    </select>
+    <select id="getInfo" resultType="com.sdy.dataexchange.biz.model.DbMappingResult">
+        SELECT
+          gt.gather_desc gatherDesc
+          ,gt.gather_id gatherId
+          ,db1.db_id sourceDbId
+        ,db1.db_desc AS 'sourceDb'
+        ,db1.db_name sourceDbName
+        ,db1.db_ip sourceDbIp
+        ,db1.db_port sourceDbPort
+        ,db1.db_user sourceDbUser
+        ,db2.db_id destDbId
+        ,db2.db_desc AS 'destDb'
+        ,db2.db_name destDbName
+        ,db2.db_ip destDbIp
+        ,db2.db_port destDbPort
+        ,db2.db_user destDbUser
+        ,dbm.create_time createTime
+        ,dbm.modify_time modifyTime
+        ,dbm.valid_flag validFlag
+        ,dbm.id
+        FROM
+        ex_db_mapping dbm
+        LEFT JOIN ex_db_dict db1 ON dbm.source_dbid = db1.db_id
+        LEFT JOIN ex_db_dict db2 ON dbm.dest_dbid = db2.db_id
+        LEFT JOIN ex_gather_dict gt ON dbm.gather_id = gt.gather_id WHERE dbm.id=#{id}
+    </select>
+    <select id="getGatherId" resultType="java.lang.Integer">
+        SELECT gather_id from ex_gather_dict where gather_desc=#{gatherDesc}
+    </select>
+    <select id="getExDbMapping" resultType="com.sdy.dataexchange.biz.model.ExDbMapping">
+        select gather_id,source_dbid,dest_dbid,create_time,modify_time,valid_flag,id from ex_db_mapping where gather_id=#{gatherId}
+    </select>
+    <select id="getDbName" resultType="java.lang.String">
+        select db_desc from ex_db_dict where db_id=#{dbid}
+    </select>
+
+
+    <select id="getDbId" resultType="java.lang.Integer">
+        select db_id from ex_db_dict where db_desc=#{sourceDb} and db_user=#{sourceUser1}
+    </select>
+    <select id="getDestDbId" resultType="java.lang.Integer">
+        select db_id from ex_db_dict where db_desc=#{destDb}
+    </select>
+    <insert id="insertDbMapping">
+        insert into ex_db_mapping (gather_id,source_dbid,dest_dbid,create_time)
+        values(
+        #{gatherId},
+        #{sourceDbId},
+        #{destDbId},
+        #{createTime}
+        )
+    </insert>
+    <select id="getDbMapping" resultType="com.sdy.dataexchange.biz.model.ExDbMapping">
+        select gather_id,source_dbid,dest_dbid,create_time,modify_time,valid_flag,id from ex_db_mapping where
+        gather_id=#{gatherId} and source_dbid=#{sourceDbId} and dest_dbid=#{destDbId}
+    </select>
+    <select id="getGatherIdByDestId" resultType="java.lang.Integer">
+        select DISTINCT gather_id from ex_db_mapping where dest_dbid=#{destDbId}
+    </select>
+    <select id="getDbIdByGatherId" resultType="java.lang.Integer">
+        select DISTINCT dest_dbid from ex_db_mapping where gather_id=#{gatherd}
+    </select>
+    <update id="updateDbMapping">
+        update ex_db_mapping set
+        gather_id=#{gatherId},
+        source_dbid=#{sourceDbId},
+        dest_dbid=#{destDbId},
+        modify_time=#{modifyTime}
+        where id=#{id}
+    </update>
+</mapper>

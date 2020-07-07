@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdy.dataexchange.biz.mapper.InsertInfoMapper">
+    <insert id="insertIntoExTableDict" >
+        insert into ex_table_dict (
+        db_id ,
+        db_table ,
+        create_time)
+        VALUES (
+        #{leftDbId},
+        #{leftTableName},
+        #{createTime}
+        )
+    </insert>
+    <insert id="insertIntoExTableMapping">
+        insert into ex_table_mapping (
+        source_syncid,
+        dest_syncid,
+        create_time
+        )VALUES (
+        #{sourceSyncId},
+        #{destSyncId},
+        #{createTime}
+        )
+    </insert>
+    <select id="getSyncSeqno" resultType="java.lang.Integer">
+        select sync_seqno from ex_field_dict where sync_id =#{sourceSyncid} and sync_field=#{field}
+    </select>
+    <select id="getId" resultType="java.lang.Integer">
+        select id from ex_table_mapping where source_syncid=#{sourceSyncId} and dest_syncid=#{destSyncId}
+    </select>
+    <select id="getSyncIds" resultType="java.lang.Integer">
+        select sync_id from ex_table_dict where db_id =#{dbId} and db_table=#{tableName}
+    </select>
+    <select id="getSyncField" resultType="java.lang.String">
+        select sync_field from ex_field_dict where sync_id=#{syncId}
+    </select>
+</mapper>

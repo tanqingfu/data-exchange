@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdy.dataexchange.biz.mapper.DemoMapper">
+<select id="getTables" resultType="com.sdy.dataexchange.biz.model.DTO.Mapping">
+    SELECT db_id,table_id,table_name1 from mapping where db_id=#{db_id}
+</select>
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdy.dataexchange.biz.mapper.ExFieldDictMapper">
+<select id="getTableName" resultType="com.sdy.dataexchange.biz.model.TableNameResult">
+    SELECT
+    b.sync_id
+    ,b.sync_seqno
+    ,b.sync_field
+    ,b.sync_type
+    ,a.db_table
+    FROM
+    ex_table_dict a
+    LEFT JOIN ex_field_dict b ON a.sync_id = b.sync_id
+</select>
+    <select id="getTotle" resultType="java.lang.Integer">
+        select count(*)
+        FROM
+        ex_table_dict a
+        LEFT JOIN ex_field_dict b ON a.sync_id = b.sync_id
+    </select>
+    <select id="getInfo" resultType="com.sdy.dataexchange.biz.model.TableNameResult">
+         SELECT
+         b.sync_id
+         ,b.sync_seqno
+         ,b.sync_field
+         ,b.sync_type
+         ,a.db_table
+         FROM
+         ex_table_dict a
+         ,ex_field_dict b WHERE a.sync_id = b.sync_id AND b.sync_seqno=#{syncSeqno}
+    </select>
+    <select id="getDbInfo" resultType="com.sdy.dataexchange.biz.model.ExDbDict">
+        select
+        db_id
+        ,db_desc
+        ,db_ip
+        ,db_port
+        ,db_user
+        ,db_passwd
+        ,db_name
+        ,db_type
+        ,source_or_dest
+        ,organization_id
+        from
+        ex_db_dict where db_id=#{dbId}
+    </select>
+    <select id="getDbId" resultType="java.lang.Integer">
+        select db_id from ex_db_dict where db_desc=#{dbName}
+    </select>
+    <select id="getDoneFields" resultType="java.util.Map">
+        SELECT DISTINCT b.`source_syncname` sourceField,a.sync_type sourceType,b.dest_syncname destField,c.sync_type destType
+        FROM ex_field_mapping b
+        LEFT JOIN ex_field_dict a ON a.sync_field=b.`source_syncname` AND a.`sync_id`=b.`source_syncid`
+        LEFT JOIN ex_field_dict c ON c.sync_field=b.`dest_syncname` AND c.`sync_id`=b.`dest_syncid`
+        WHERE b.`source_syncid`= #{sourceTableId} AND b.`dest_syncid`= #{destTableId}
+    </select>
+    <select id="getTableId" resultType="java.lang.Integer">
+        select sync_id from ex_table_dict where db_id=#{dbId} and db_table=#{tableName}
+    </select>
+</mapper>

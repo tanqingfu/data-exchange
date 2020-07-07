@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdy.dataexchange.biz.mapper.ExMonitorMysqlMapper">
+
+    <delete id="deleteExpiredAppendLog">
+        delete from ex_monitor_mysql where id &lt;= #{_parameter}
+    </delete>
+    <select id="countDataSize" resultType="java.lang.Integer">
+        select IFNULL(sum(OCTET_LENGTH(byte_data)), 0) from (
+            select byte_data from ex_monitor_mysql
+            where table_id = #{tableId}
+            <if test="startId!=null">
+                and id > #{startId}
+            </if>
+            order by id asc
+            limit ${count}
+        ) s
+    </select>
+</mapper>

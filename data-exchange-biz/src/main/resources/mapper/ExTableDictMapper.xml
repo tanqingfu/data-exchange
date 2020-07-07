@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdy.dataexchange.biz.mapper.ExTableDictMapper">
+<select id="getDbName" resultType="com.sdy.dataexchange.biz.model.DbNameResult">
+     SELECT
+     a.sync_id
+     ,a.db_table
+     ,a.create_time
+     ,a.modify_time
+     ,a.valid_flag
+     ,b.db_desc
+     FROM ex_table_dict a
+    LEFT JOIN ex_db_dict b ON a.db_id = b.db_id
+</select>
+    <select id="getTotle" resultType="java.lang.Integer">
+           SELECT
+    count(*)
+     FROM ex_table_dict a
+    LEFT JOIN ex_db_dict b ON a.db_id = b.db_id
+    </select>
+    <select id="getInfo" resultType="com.sdy.dataexchange.biz.model.DbNameResult">
+        SELECT
+        a.sync_id
+        ,a.db_table
+        ,a.create_time
+        ,a.modify_time
+        ,a.valid_flag
+        ,b.db_desc FROM ex_table_dict a
+        ,ex_db_dict b WHERE a.db_id = b.db_id AND a.sync_id=#{syncId}
+    </select>
+    <select id="listToSync" resultType="com.sdy.dataexchange.biz.model.ExTableDict">
+        select d.* from ex_job_task a 
+        left join ex_job_info b on b.job_id = a.job_id
+        left join ex_table_mapping c on c.id = a.tbmap_id
+        left join ex_table_dict d on d.sync_id = c.source_syncid
+        left join ex_db_dict e on e.db_id = d.db_id
+        where e.db_type = 'MYSQL' and b.job_id is not null
+         and b.job_state in (2, 5)
+        GROUP BY d.sync_id
+    </select>
+    <select id="getDbInfo" resultType="com.sdy.dataexchange.biz.model.ExDbDict">
+        select
+        db_id
+        ,db_desc
+        ,db_ip
+        ,db_port
+        ,db_user
+        ,db_passwd
+        ,db_name
+        ,db_type
+        ,source_or_dest
+        ,organization_id
+        from ex_db_dict where db_id=#{dbId}
+    </select>
+    <select id="getDestDbInfo" resultType="java.util.Map">
+        SELECT
+        a.dest_dbid destDbId
+        ,b.db_desc destDbDesc
+        ,b.db_name destDbName
+        ,b.db_ip destDbIp
+        ,b.db_port destDbPort
+        ,b.db_user destDbUser
+        FROM ex_db_mapping a
+        LEFT JOIN ex_db_dict b ON a.`dest_dbid`=b.`db_id`WHERE a.`source_dbid`=#{sourceDbId} and a.gather_id=#{gatherId}
+    </select>
+</mapper>

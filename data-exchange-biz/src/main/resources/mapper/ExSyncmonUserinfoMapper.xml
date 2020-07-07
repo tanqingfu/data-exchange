@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdy.dataexchange.biz.mapper.ExSyncmonUserinfoMapper">
+<select id="getUserInfos" resultType="com.sdy.dataexchange.biz.model.UserInfo">
+    SELECT
+    a.gather_id gatherId
+    ,b.gather_desc gatherDesc
+    ,a.sync_desc syncDesc
+    ,a.syncdb_ip syncdbIp
+    ,a.syncdb_id syncdbId
+    ,a.syncdb_port syncdbPort
+    ,a.syncdb_user syncdbUser
+    ,a.syncdb_name syncdbName
+    ,a.syncdb_type syncdbType,
+    a.create_time createTime
+    ,a.valid_flag validFlag
+    FROM ex_syncmon_userinfo a
+    LEFT JOIN ex_gather_dict b ON a.gather_id=b.gather_id
+    order by create_time Desc
+</select>
+    <select id="getTotle" resultType="java.lang.Integer">
+    SELECT
+    count(*)
+    FROM ex_syncmon_userinfo a
+    LEFT JOIN ex_gather_dict b ON a.gather_id=b.gather_id
+    order by create_time Desc
+    </select>
+    <select id="getUserInfoDetail" resultType="com.sdy.dataexchange.biz.model.UserInfo">
+        SELECT
+        a.gather_id gatherId
+        ,b.gather_desc gatherDesc
+        ,a.sync_desc syncDesc
+        ,a.syncdb_ip syncdbIp
+        ,a.syncdb_id syncdbId
+        ,a.syncdb_port syncdbPort
+        ,a.syncdb_user syncdbUser
+        ,a.syncdb_passwd syncdbPasswd
+        ,a.syncdb_name syncdbName
+        ,a.syncdb_type syncdbType
+        ,a.create_time createTime
+        ,a.modify_time modifyTime
+        ,a.valid_flag validFlag
+        FROM ex_syncmon_userinfo a
+        LEFT JOIN ex_gather_dict b ON a.gather_id=b.gather_id where a.syncdb_id=#{id}
+    </select>
+    <delete id="removeOne">
+        delete from ex_syncmon_userinfo where syncdb_id=#{syncdbId}
+    </delete>
+    <select id="getInfo" resultType="com.sdy.dataexchange.biz.model.UserInfo">
+         SELECT
+         a.gather_id gatherId
+         ,b.gather_desc gatherDesc
+         ,a.sync_desc syncDesc
+         ,a.syncdb_ip syncdbIp
+         ,a.syncdb_id syncdbId
+         ,a.syncdb_port syncdbPort
+         ,a.syncdb_user syncdbUser
+         ,a.syncdb_name syncdbName
+         ,a.syncdb_type syncdbType
+         ,a.create_time createTime
+         ,a.valid_flag validFlag
+        FROM ex_syncmon_userinfo a
+        LEFT JOIN ex_gather_dict b ON a.gather_id=b.gather_id where a.syncdb_user=#{key}
+        order by create_time Desc
+    </select>
+    <select id="getSyncdbId" resultType="java.lang.Integer">
+        select syncdb_Id from ex_syncmon_userinfo where syncdb_ip=#{syncdbIp} and syncdb_port=#{syncdbPort}
+    </select>
+    <select id="getIpAndPort" resultType="java.util.Map">
+        select
+        syncdb_id syncdbId
+        ,syncdb_ip syncIp
+        ,syncdb_port syncPort
+        from ex_syncmon_userinfo where sync_desc=#{syncDesc}
+    </select>
+    <update id="updateUserInfo">
+        update ex_syncmon_userinfo set
+        sync_desc=#{exSyncmonUserinfo.syncDesc}
+        ,syncdb_ip=#{exSyncmonUserinfo.syncdbIp}
+        ,syncdb_port=#{exSyncmonUserinfo.syncdbPort}
+        ,syncdb_user=#{exSyncmonUserinfo.syncdbUser}
+        ,syncdb_passwd=#{exSyncmonUserinfo.syncdbPasswd}
+        ,syncdb_name=#{exSyncmonUserinfo.syncdbName}
+        ,syncdb_type=#{exSyncmonUserinfo.syncdbType}
+        ,modify_time=#{exSyncmonUserinfo.modifyTime}
+        where
+        syncdb_id=#{exSyncmonUserinfo.syncdbId}
+    </update>
+    <select id="getGatherId" resultType="java.lang.Integer">
+        select gather_id from ex_gather_dict where gather_desc=#{gatherDesc}
+    </select>
+    <insert id="addUserInfo">
+        insert into ex_syncmon_userinfo (
+        gather_id,
+        sync_desc,
+        syncdb_ip,
+        syncdb_port,
+        syncdb_user,
+        syncdb_passwd,
+        syncdb_name,
+        syncdb_type,
+        create_time,
+        valid_flag
+        )VALUES (
+        #{gatherId},
+        #{dbDesc},
+        #{ip},
+        #{port},
+        #{userName},
+        #{passwd},
+        #{dbName},
+        #{dbType},
+        #{createTime},
+        #{validFlag}
+        )
+    </insert>
+    <select id="getUserInfo" resultType="com.sdy.dataexchange.biz.model.ExSyncmonUserinfo">
+        select gather_id,
+        syncdb_id,
+        sync_desc,
+        syncdb_ip,
+        syncdb_port,
+        syncdb_user,
+        syncdb_passwd,
+        syncdb_name,
+        syncdb_type,
+        create_time,
+        modify_time,
+        valid_flag
+        from ex_syncmon_userinfo
+        where gather_id=#{gatherId} AND
+        syncdb_name=#{dbName} AND
+        syncdb_passwd=#{passwd} AND
+        syncdb_ip=#{ip} AND
+        syncdb_port=#{port} AND
+        syncdb_user=#{userName}
+    </select>
+    <select id="getUserInfoDesc" resultType="java.lang.String">
+        select sync_desc from ex_syncmon_userinfo
+    </select>
+    <select id="getAllUserInfo" resultType="java.util.Map">
+        SELECT
+        syncdb_id syncId
+        ,syncdb_user syncdbUser
+        ,syncdb_ip syncdbIp
+        ,syncdb_port syncdbPort
+        from ex_syncmon_userinfo
+    </select>
+    <update id="changeCode">
+        update ex_syncmon_userinfo set valid_flag=#{i} where syncdb_id=#{syncdbId}
+    </update>
+</mapper>

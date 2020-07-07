@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdy.dataexchange.biz.mapper.ExSwapdataDictMapper">
+    <select id="querySwapdata" resultType="java.util.Map">
+        select
+        info.job_name
+        ,db.db_desc AS 'sourcedb_desc'
+        ,db2.db_desc AS 'destdb_desc'
+        ,swa.source_name
+        ,swa.dest_name
+        ,swa.swa_gross
+        ,swa.swa_data
+        ,task.jobtask_name
+        from
+        ex_swapdata_dict swa
+        LEFT JOIN ex_job_info info ON swa.job_id = info.job_id
+        LEFT JOIN ex_job_task task ON swa.task_id = task.jobtask_id
+        LEFT JOIN ex_db_dict db ON swa.sourcedb_id = db.db_id
+        LEFT JOIN ex_db_dict db2 ON swa.destdb_id = db2.db_id
+        where 1=1
+        <if test="jobtaskId!=null and jobtaskId!=''">
+            AND
+            task.tbmap_id= #{jobtaskId}
+        </if>
+        <if test="sourceTableName!=null and sourceTableName!=''">
+            AND
+            swa.source_name= #{sourceTableName}
+        </if>
+        <if test="liftCreateTime!=null and liftCreateTime!=''">
+            AND
+            swa.swa_data &gt;=#{liftCreateTime}
+        </if>
+        <if test="rightCreateTime!=null and rightCreateTime!=''">
+            AND
+            swa.swa_data&lt;#{rightCreateTime}
+        </if>
+    </select>
+    <select id="querySwadataSize" resultType="java.lang.Integer">
+        select
+        count(*)
+        from
+        ex_swapdata_dict swa
+        LEFT JOIN ex_job_info info ON swa.job_id = info.job_id
+        LEFT JOIN ex_job_task task ON swa.task_id = task.jobtask_id
+        LEFT JOIN ex_db_dict db ON swa.sourcedb_id = db.db_id
+        LEFT JOIN ex_db_dict db2 ON swa.destdb_id = db2.db_id
+        where 1=1
+        <if test="jobtaskId!=null and jobtaskId!=''">
+            AND
+            swa.task_id= #{jobtaskId}
+        </if>
+        <if test="sourceTableName!=null and sourceTableName!=''">
+            AND
+            swa.source_name= #{sourceTableName}
+        </if>
+        <if test="liftCreateTime!=null and liftCreateTime!=''">
+            AND
+            swa.swa_data &gt;=#{liftCreateTime}
+        </if>
+        <if test="rightCreateTime!=null and rightCreateTime!=''">
+            AND
+            swa.swa_data&lt;#{rightCreateTime}
+        </if>
+    </select>
+
+
+    <select id="querySwadataSize2" resultType="java.util.Map">
+        SELECT
+        swa.job_id
+        ,db.db_desc AS 'sourcedb_desc'
+        ,db2.db_desc AS 'destdb_desc'
+        ,info.job_name
+        ,SUM(swa.swa_gross) AS 'swa_gross'
+        FROM
+        ex_swapdata_dict swa
+        LEFT JOIN ex_job_info info ON swa.job_id = info.job_id
+        LEFT JOIN ex_db_dict db ON swa.sourcedb_id = db.db_id
+        LEFT JOIN ex_db_dict db2 ON swa.destdb_id = db2.db_id
+        WHERE
+        1=1
+        <if test="jobId!=null and jobId!=''">
+            AND
+            info.job_id = #{jobId}
+        </if>
+        GROUP BY
+        swa.job_id,db.db_desc,db2.db_desc
+    </select>
+    <select id="querySwapdata2" resultType="java.util.Map">
+        SELECT
+        swa.job_id
+        ,db.db_desc AS 'sourcedb_desc'
+        ,db2.db_desc AS 'destdb_desc'
+        ,info.job_name
+        ,SUM(swa.swa_gross) AS 'swa_gross'
+        FROM
+        ex_swapdata_dict swa
+        LEFT JOIN ex_job_info info ON swa.job_id = info.job_id
+        LEFT JOIN ex_db_dict db ON swa.sourcedb_id = db.db_id
+        LEFT JOIN ex_db_dict db2 ON swa.destdb_id = db2.db_id
+        WHERE
+        1=1
+        <if test="jobId!=null and jobId!=''">
+            AND
+            info.job_id=#{jobId}
+        </if>
+        GROUP BY
+        swa.job_id,db.db_desc,db2.db_desc
+    </select>
+    <select id="queryGroupByJobIds" resultType="com.sdy.dataexchange.biz.model.ExSwapdataDict" parameterType="java.util.List">
+        select min(job_id) as job_id, task_id, ifnull(SUM(swa_gross), 0) as swa_gross, ifnull(SUM(swa_input), 0) as swa_input
+        from ex_swapdata_dict
+        where job_id in
+        <foreach item="item" collection="jobIdList" separator="," open="(" close=")" index="">
+            #{item, jdbcType=INTEGER}
+        </foreach>
+        group by task_id
+        order by job_id
+    </select>
+</mapper>

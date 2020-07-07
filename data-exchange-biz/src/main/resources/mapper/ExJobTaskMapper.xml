@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdy.dataexchange.biz.mapper.ExJobTaskMapper">
+    <select id="queryAllTask" resultType="com.sdy.dataexchange.biz.model.ExJobTask">
+        select jobtask_name,tbmap_id from ex_job_task GROUP BY jobtask_name,tbmap_id
+    </select>
+    <select id="getTask" resultType="com.sdy.dataexchange.biz.model.TaskInfos">
+        SELECT
+        a.jobtask_name jobtaskName
+        ,a.jobtask_id jobtaskId
+        ,a.`valid_flag` validFlag
+        ,a.job_id jobId
+        ,b.job_name
+        ,c.db_desc sourceDb
+        ,c.db_ip sourceDbIp
+        ,c.db_port sourceDbPort
+        ,c.db_user sourceDbUser
+        ,c.db_name sourceDbName
+        ,d.db_table sourceTb
+        ,e.db_desc destDb
+        ,e.db_ip destDbIp
+        ,e.db_port destDbPort
+        ,e.db_user destDbUser
+        ,e.db_name destDbName
+        ,f.db_table destTb
+        ,h.create_time createTime
+        FROM ex_job_task a LEFT JOIN ex_job_info b ON a.`job_id`=b.`job_id`
+        LEFT JOIN ex_db_mapping g ON a.dbmap_id=g.id
+        LEFT JOIN ex_table_mapping h ON a.tbmap_id=h.id
+        LEFT JOIN ex_db_dict c ON c.`db_id`=g.source_dbid
+        LEFT JOIN ex_table_dict d ON d.sync_id=h.source_syncid
+        LEFT JOIN ex_db_dict e ON e.db_id=g.dest_dbid
+        LEFT JOIN ex_table_dict f ON f.sync_id=h.dest_syncid
+        order by h.create_time desc
+</select>
+    <select id="getDetailTotle" resultType="java.lang.Integer">
+         SELECT
+        count(*)
+        FROM ex_job_task a LEFT JOIN ex_job_info b ON a.`job_id`=b.`job_id`
+        LEFT JOIN ex_db_mapping g ON a.dbmap_id=g.id
+        LEFT JOIN ex_table_mapping h ON a.tbmap_id=h.id
+        LEFT JOIN ex_db_dict c ON c.`db_id`=g.source_dbid
+        LEFT JOIN ex_table_dict d ON d.sync_id=h.source_syncid
+        LEFT JOIN ex_db_dict e ON e.db_id=g.dest_dbid
+        LEFT JOIN ex_table_dict f ON f.sync_id=h.dest_syncid
+        where a.jobtask_id=#{id}
+    </select>
+    <select id="getTotle" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM ex_job_task a LEFT JOIN ex_job_info b ON a.`job_id`=b.`job_id`
+        LEFT JOIN ex_db_mapping g ON a.dbmap_id=g.id
+        LEFT JOIN ex_table_mapping h ON a.tbmap_id=h.id
+        LEFT JOIN ex_db_dict c ON c.`db_id`=g.source_dbid
+        LEFT JOIN ex_table_dict d ON d.sync_id=h.source_syncid
+        LEFT JOIN ex_db_dict e ON e.db_id=g.dest_dbid
+        LEFT JOIN ex_table_dict f ON f.sync_id=h.dest_syncid
+    </select>
+    <select id="getOneTask" resultType="com.sdy.dataexchange.biz.model.TaskInfoDetails">
+        SELECT
+        DISTINCT
+        a.jobtask_name jobtaskName
+        ,a.jobtask_id jobtaskId
+        ,a.`valid_flag` validFlag
+        ,a.job_id jobId
+        ,b.job_name
+        ,c.db_desc sourceDb
+        ,c.db_ip sourceDbIp
+        ,c.db_port sourceDbPort
+        ,c.db_user sourceDbUser
+        ,c.db_name sourceDbName
+        ,d.db_table sourceTb
+        ,e.db_desc destDb
+        ,e.db_ip destDbIp
+        ,e.db_port destDbPort
+        ,e.db_user destDbUser
+        ,e.db_name destDbName
+        ,f.db_table destTb
+        ,i.source_syncname sourceField
+        ,j.sync_type sourceFieldType
+        ,i.dest_syncname destField
+        ,k.sync_type destFieldType
+        ,m.gather_desc gatherDesc
+        FROM ex_job_task a LEFT JOIN ex_job_info b ON a.`job_id`=b.`job_id`
+        LEFT JOIN ex_db_mapping g ON a.dbmap_id=g.id
+        LEFT JOIN ex_table_mapping h ON a.tbmap_id=h.id
+        LEFT JOIN ex_db_dict c ON c.`db_id`=g.source_dbid
+        LEFT JOIN ex_table_dict d ON d.sync_id=h.source_syncid
+        LEFT JOIN ex_db_dict e ON e.db_id=g.dest_dbid
+        LEFT JOIN ex_table_dict f ON f.sync_id=h.dest_syncid
+        LEFT JOIN ex_field_mapping i ON i.source_syncid=h.source_syncid AND i.dest_syncid=h.dest_syncid
+        LEFT JOIN ex_field_dict j ON j.sync_id=i.source_syncid and j.sync_field=i.source_syncname
+        LEFT JOIN ex_field_dict k ON k.sync_id=i.dest_syncid and k.sync_field=i.dest_syncname
+        LEFT JOIN ex_gather_dict m on m.gather_id=g.gather_id
+        where a.jobtask_id=#{id}
+   </select>
+    <select id="getInfo" resultType="com.sdy.dataexchange.biz.model.TaskInfos">
+        SELECT
+        a.jobtask_name jobtaskName
+        ,a.jobtask_id jobtaskId
+        ,a.`valid_flag` validFlag
+        ,a.job_id jobId
+        ,b.job_name
+        ,c.db_desc sourceDb
+        ,c.db_ip sourceDbIp
+        ,c.db_port sourceDbPort
+        ,c.db_user sourceDbUser
+        ,c.db_name sourceDbName
+        ,d.db_table sourceTb
+        ,e.db_desc destDb
+        ,e.db_ip destDbIp
+        ,e.db_port destDbPort
+        ,e.db_user destDbUser
+        ,e.db_name destDbName
+        ,f.db_table destTb
+        FROM ex_job_task a LEFT JOIN ex_job_info b ON a.`job_id`=b.`job_id`
+        LEFT JOIN ex_db_mapping g ON a.dbmap_id=g.id
+        LEFT JOIN ex_table_mapping h ON a.tbmap_id=h.id
+        LEFT JOIN ex_db_dict c ON c.`db_id`=g.source_dbid
+        LEFT JOIN ex_table_dict d ON d.sync_id=h.source_syncid
+        LEFT JOIN ex_db_dict e ON e.db_id=g.dest_dbid
+        LEFT JOIN ex_table_dict f ON f.sync_id=h.dest_syncid  where a.jobtask_name=#{key}
+    </select>
+    <select id="getDeleteFields" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+        SELECT
+        a.sync_field sourceField
+        ,b.sync_field destField
+        ,d.`sync_id` sourceTableId
+        ,e.sync_id destTableId
+        FROM ex_field_mapping c
+        LEFT JOIN ex_field_dict a ON a.`sync_id`=c.`source_syncid` AND a.`sync_field`=c.`source_syncname`
+        LEFT JOIN ex_field_dict b ON b.`sync_id`=c.`dest_syncid` AND b.`sync_field`=c.`dest_syncname`
+        LEFT JOIN ex_table_dict d ON d.`sync_id`=c.`source_syncid`
+        LEFT JOIN ex_table_dict e ON e.sync_id=c.`dest_syncid`
+        LEFT JOIN ex_table_mapping f ON f.`source_syncid`=d.`sync_id` AND f.`dest_syncid`=e.sync_id
+        LEFT JOIN ex_job_task g ON g.tbmap_id=f.id
+        WHERE g.jobtask_id=#{taskId}
+    </select>
+    <select id="getMappingIdBySource" resultType="java.lang.Integer">
+        select id from ex_field_mapping where source_syncid=#{tableId} and source_syncname=#{field}
+    </select>
+    <select id="getMappingIdByDest" resultType="java.lang.Integer">
+        select id from ex_field_mapping where dest_syncid=#{tableId} and dest_syncname=#{field}
+    </select>
+    <delete id="deleteField">
+        delete from ex_field_dict where sync_id=#{tableId} and sync_field=#{field}
+    </delete>
+    <select id="getMappingIds" resultType="java.lang.Integer">
+        select id from ex_field_mapping where source_syncid=#{sourceTableId} and source_syncname=#{sourceField} and dest_syncid=#{destTableId} and dest_syncname=#{destField}
+    </select>
+    <select id="getAllFields" resultType="java.util.Map">
+        select sync_id tableId,sync_field field from ex_field_dict
+    </select>
+    <select id="getTableId" resultType="com.sdy.dataexchange.biz.model.ExTableDict">
+        select sync_id,db_id,db_table,create_time,modify_time,valid_flag from ex_table_dict where db_id=#{dbId} and db_table=#{tableName}
+    </select>
+    <select id="getFields" resultType="java.lang.String">
+        select sync_field from ex_field_dict
+    </select>
+    <insert id="insertIntoExTableDict" >
+        insert into ex_table_dict (
+        db_id ,
+        db_table ,
+        create_time)
+        VALUES (
+        #{leftDbId},
+        #{leftTableName},
+        #{createTime}
+        )
+    </insert>
+    <insert id="insertIntoExTableMapping">
+        insert into ex_table_mapping (
+        task_name,
+        source_syncid,
+        dest_syncid,
+        create_time
+        )VALUES (
+        #{taskName},
+        #{sourceSyncId},
+        #{destSyncId},
+        #{createTime}
+        )
+    </insert>
+    <select id="getSyncSeqno" resultType="java.lang.Integer">
+        select sync_seqno from ex_field_dict where sync_id =#{sourceSyncid} and sync_field=#{field}
+    </select>
+    <select id="getId" resultType="java.lang.Integer">
+        select id from ex_table_mapping where source_syncid=#{sourceSyncId} and dest_syncid=#{destSyncId}
+    </select>
+    <select id="getSyncIds" resultType="java.lang.Integer">
+        select sync_id from ex_table_dict where db_id =#{dbId} and db_table=#{tableName}
+    </select>
+    <delete id="deleteFromExFieldDict">
+        delete from ex_field_dict where sync_id=#{syncId} and sync_field=#{syncField}
+    </delete>
+    <delete id="deleteFromExFieldMapping">
+        delete from ex_field_mapping where source_syncid=#{sourceSyncId} and source_syncname=#{leftSyncField} and dest_syncid=#{destSyncId} and dest_syncname=#{rightSyncField}
+    </delete>
+    <select id="getSyncField" resultType="java.lang.String">
+        select sync_field from ex_field_dict where sync_id=#{syncId}
+    </select>
+    <select id="getDbId" resultType="java.lang.Integer">
+        select db_id from ex_db_dict where db_desc=#{dbName}
+    </select>
+    <select id="getFieldMappingId" resultType="java.lang.Integer">
+        select id from ex_field_mapping where source_syncid=#{sourceSyncId} and source_syncname=#{leftFieldName} and dest_syncid=#{destSyncId} and dest_syncname=#{rightFieldName}
+    </select>
+    <insert id="addPrimaryKey">
+        insert into ex_table_primarykey (dbid,tableid) VALUES (#{dbId},#{syncId})
+    </insert>
+    <select id="getPrimaryId" resultType="java.lang.Integer">
+        select id from ex_table_primarykey where dbid=#{dbId} and tableid=#{syncId}
+    </select>
+    <select id="getDbMappingId" resultType="java.lang.Integer">
+        select id from ex_db_mapping where source_dbid=#{sourceDbId} and dest_dbid=#{destDbId}
+    </select>
+    <insert id="addJobTask">
+        insert into ex_job_task (jobtask_name,tbmap_id,dbmap_id,sync_id,valid_flag) VALUES (#{taskName},#{tbMapId},#{dbMappingId},#{syncId3},#{validFlag})
+    </insert>
+    <select id="getAllTaskNames" resultType="java.lang.String">
+        SELECT jobtask_name from ex_job_task
+    </select>
+    <select id="getDestTb" resultType="java.lang.Integer">
+        select dest_syncid from ex_table_mapping where source_syncid=#{syncId1}
+    </select>
+    <select id="getTaskId" resultType="java.lang.Integer">
+        select jobtask_id from ex_job_task where dbmap_id=#{dbMappingId} and tbmap_id=#{tbMapId}
+    </select>
+    <select id="updateTaskName" resultType="java.lang.Integer">
+        update ex_job_task set jobtask_name=#{taskName} where dbMap_id=#{dbMappingId} and tbMap_id=#{tbMapId1}
+    </select>
+    <update id="updatePrimaryKey">
+        update ex_table_primarykey set
+        field_num=#{exTablePrimarykey.fieldNum},
+        prm_field1=#{exTablePrimarykey.prmField1},
+        prm_field2=#{exTablePrimarykey.prmField2},
+        prm_field3=#{exTablePrimarykey.prmField3},
+        prm_field4=#{exTablePrimarykey.prmField4},
+        prm_field5=#{exTablePrimarykey.prmField5},
+        prm_field6=#{exTablePrimarykey.prmField6},
+        prm_field7=#{exTablePrimarykey.prmField7},
+        prm_field8=#{exTablePrimarykey.prmField8},
+        prm_field9=#{exTablePrimarykey.prmField9},
+        prm_field10=#{exTablePrimarykey.prmField10}
+        where dbid=#{exTablePrimarykey.dbid} and tableid=#{exTablePrimarykey.tableid}
+    </update>
+    <select id="getFieldMappingBySourceField" resultType="java.lang.Integer">
+        select COUNT(id) from ex_field_mapping where source_syncid=#{sourceSyncId} and source_syncname=#{leftSyncField}
+    </select>
+    <select id="getFieldMappingIdByDestField" resultType="java.lang.Integer">
+        select COUNT(id) from ex_field_mapping where dest_syncid=#{syncId2} and dest_syncname=#{rightSyncField}
+    </select>
+    <insert id="insertIntoLeftExFieldDicts">
+        insert into ex_field_dict (sync_id,sync_field,sync_type) values
+        <foreach collection="leftFields" item="fields" separator=",">
+            (#{fields.syncId},#{fields.syncField},#{fields.syncType})
+        </foreach>
+    </insert>
+    <insert id="insertIntoRightExFieldDicts">
+        insert into ex_field_dict (sync_id,sync_field,sync_type) values
+        <foreach collection="rightFields" item="fields" separator=",">
+            (#{fields.syncId},#{fields.syncField},#{fields.syncType})
+        </foreach>
+    </insert>
+    <insert id="insertIntoExFieldMappings">
+        insert into ex_field_mapping
+        (source_syncid
+        ,source_syncname
+        ,dest_syncid
+        ,dest_syncname
+        ,valid_flag) VALUES
+        <foreach collection="exFieldMappings" item="exFieldMapping" separator=",">
+            (#{exFieldMapping.sourceSyncid}
+            ,#{exFieldMapping.sourceSyncname}
+            ,#{exFieldMapping.destSyncid}
+            ,#{exFieldMapping.destSyncname}
+            ,#{exFieldMapping.validFlag})
+        </foreach>
+    </insert>
+    <select id="getAllFieldsDone" resultType="java.util.Map">
+        select sync_id syncId,sync_field syncField from ex_field_dict
+    </select>
+    <select id="listMappedSrcDb" resultType="com.sdy.dataexchange.biz.model.ExDbDict">
+        SELECT c.db_id FROM ex_job_task a
+        left join ex_db_mapping b on b.id = a.dbmap_id
+        left join ex_db_dict c on c.db_id = b.source_dbid
+        left join ex_job_info d on d.job_id = a.job_id
+        where a.jobtask_id &lt;> #{_parameter} and d.job_state in (2, 5)
+        and b.gather_id in (
+            select t2.gather_id from ex_job_task t1 left join ex_db_mapping t2 on t2.id = t1.dbmap_id
+            where t1.jobtask_id = #{_parameter}
+        )
+        group by c.db_id
+    </select>
+    <select id="listMappedSrcTb" resultType="com.sdy.dataexchange.biz.model.ExTableDict">
+        SELECT c.sync_id FROM ex_job_task a
+        left join ex_table_mapping b on b.id = a.tbmap_id
+        left join ex_table_dict c on c.sync_id = b.source_syncid
+        left join ex_job_info d on d.job_id = a.job_id
+        left join ex_db_dict e on e.db_id = c.db_id
+        left join ex_syncmon_userinfo f on f.syncdb_id = e.syncdb_id
+        where a.jobtask_id &lt;> #{_parameter} and d.job_state in (2, 5)
+        and f.gather_id in (
+            select t2.gather_id from ex_job_task t1 left join ex_db_mapping t2 on t2.id = t1.dbmap_id
+            where t1.jobtask_id = #{_parameter}
+        )
+        group by c.sync_id
+    </select>
+    <select id="getJobState" resultType="java.lang.Integer">
+        SELECT a.job_state FROM ex_job_info a
+        LEFT JOIN ex_job_task b ON a.`job_id`=b.`job_id`
+        WHERE b.`dbmap_id`=#{beforeDbMappingId} AND b.`tbmap_id`=#{beforeTbMappingId}
+    </select>
+    <delete id="deleteExFieldMapping">
+                delete from ex_field_mapping where source_syncid=#{sourceSyncId} and source_syncname=#{leftSyncField} and dest_syncid=#{destSyncId}
+
+    </delete>
+    <insert id="insertIntoFieldDict">
+        insert into ex_field_dict (sync_id,sync_field,sync_type) values (#{beforeDestSyncId},#{rightField},#{rightType})
+    </insert>
+    <update id="updateFieldMapping">
+        update ex_field_mapping set dest_syncname=#{rightField} where id=#{fieldMappingId}
+    </update>
+    <insert id="insertIntoFieldMaping">
+        insert into ex_field_mapping (source_syncid,source_syncname,dest_syncid,dest_syncname) values(
+        #{beforeSourceSyncId},
+        #{leftField},
+        #{beforeDestSyncId},
+        #{rightField}
+        )
+    </insert>
+</mapper>

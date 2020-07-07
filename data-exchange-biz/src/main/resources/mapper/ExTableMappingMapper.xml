@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdy.dataexchange.biz.mapper.ExTableMappingMapper">
+    <select id="getMapping" resultType="com.sdy.dataexchange.biz.model.TableMappingResult">
+          SELECT
+          e.`jobtask_name` taskName
+          ,a.id,a.create_time
+          ,a.modify_time
+          ,a.valid_flag
+          ,b.db_table sourceTable
+          ,c.db_name sourceDbName
+          ,c.db_ip sourceDbIp
+          ,c.db_port sourceDbPort
+          ,c.db_desc sourceDb
+          ,c.db_user sourceUser
+          ,d.db_desc destDb
+          ,d.db_name destDbName
+          ,d.db_ip destDbIp
+          ,d.db_port destDbPort
+          ,d.db_user destUser
+          ,f.db_table destTable
+          ,g.gather_desc gatherDesc
+          FROM ex_table_mapping a
+          LEFT JOIN ex_job_task e ON e.`tbmap_id`=a.`id`
+          LEFT JOIN ex_db_mapping h ON h.id=e.`dbmap_id`
+          LEFT JOIN ex_table_dict b ON b.`sync_id`=a.`source_syncid`
+          LEFT JOIN ex_db_dict c ON c.`db_id`=h.source_dbid
+          LEFT JOIN ex_db_dict d ON d.db_id=h.dest_dbid
+          LEFT JOIN ex_table_dict f ON f.sync_id=a.`dest_syncid`
+          LEFT JOIN ex_gather_dict g ON g.gather_id=h.gather_id
+          order by a.create_time Desc
+    </select>
+    <select id="getInfos" resultType="com.sdy.dataexchange.biz.model.TableMappingResult">
+         SELECT
+          e.`jobtask_name` taskName
+          ,a.id,a.create_time
+          ,a.modify_time
+          ,a.valid_flag
+          ,b.db_table sourceTable
+          ,c.db_name sourceDbName
+          ,c.db_ip sourceDbIp
+          ,c.db_port sourceDbPort
+          ,c.db_desc sourceDb
+          ,c.db_user sourceUser
+          ,d.db_desc destDb
+          ,d.db_name destDbName
+          ,d.db_ip destDbIp
+          ,d.db_port destDbPort
+          ,d.db_user destUser
+          ,f.db_table destTable
+          ,g.gather_desc gatherDesc
+          FROM ex_table_mapping a
+          LEFT JOIN ex_job_task e ON e.`tbmap_id`=a.`id`
+          LEFT JOIN ex_db_mapping h ON h.id=e.`dbmap_id`
+          LEFT JOIN ex_table_dict b ON b.`sync_id`=a.`source_syncid`
+          LEFT JOIN ex_db_dict c ON c.`db_id`=h.source_dbid
+          LEFT JOIN ex_db_dict d ON d.db_id=h.dest_dbid
+          LEFT JOIN ex_table_dict f ON f.sync_id=a.`dest_syncid`
+          LEFT JOIN ex_gather_dict g ON g.gather_id=h.gather_id
+          where e.jobtask_name=#{key}
+          order by a.create_time Desc
+    </select>
+    <select id="getAll" resultType="java.lang.Integer">
+           SELECT
+          count(*)
+          FROM ex_table_mapping a
+          LEFT JOIN ex_job_task e ON e.`tbmap_id`=a.`id`
+          LEFT JOIN ex_db_mapping h ON h.id=e.`dbmap_id`
+          LEFT JOIN ex_table_dict b ON b.`sync_id`=a.`source_syncid`
+          LEFT JOIN ex_db_dict c ON c.`db_id`=h.source_dbid
+          LEFT JOIN ex_db_dict d ON d.db_id=h.dest_dbid
+          LEFT JOIN ex_table_dict f ON f.sync_id=a.`dest_syncid`
+          LEFT JOIN ex_gather_dict g ON g.gather_id=h.gather_id
+          order by a.create_time Desc
+    </select>
+    <select id="getInfo" resultType="com.sdy.dataexchange.biz.model.TaskInfoResult">
+         SELECT
+         b.jobtask_name taskName
+         ,c.`db_id` sourceDbid
+         ,c.`db_desc` sourceDb
+         ,c.`db_user` sourceUser
+         ,c.db_name sourceDbName
+         ,c.db_ip sourceDbIp
+         ,c.db_port sourceDbPort
+         ,d.db_id destDbid
+         ,d.db_desc destDb
+         ,d.db_name destDbName
+         ,d.db_ip destDbIp
+         ,d.db_port destDbPort
+         ,d.db_user destUser
+         ,e.db_table sourceTable
+         ,f.db_table destTable
+         ,g.swa_data swaData
+         ,g.swa_gross swaGross
+          FROM ex_table_mapping a
+          LEFT JOIN ex_job_task b ON b.tbmap_id=a.`id`
+          LEFT JOIN ex_table_dict e ON a.source_syncid=e.sync_id
+          LEFT JOIN ex_table_dict f ON a.`dest_syncid`=f.sync_id
+          LEFT JOIN ex_db_dict c ON c.`db_id`=e.db_id
+          LEFT JOIN ex_db_dict d ON d.db_id=f.db_id
+          LEFT JOIN ex_swapdata_dict g ON g.sourcedb_id=c.`db_id`
+          AND g.destdb_id=(SELECT cc.db_id FROM ex_table_dict aa LEFT JOIN ex_db_dict cc ON aa.db_id = cc.db_id WHERE  aa.sync_id = a.dest_syncid)
+          AND g.source_name=e.db_table
+          AND dest_name=(SELECT bb.db_table FROM ex_table_mapping aa LEFT JOIN ex_table_dict bb ON aa.dest_syncid = bb.sync_id WHERE  aa.id = a.id)
+          WHERE a.`id`=#{id}
+     </select>
+    <select id="getOneInfo" resultType="com.sdy.dataexchange.biz.model.TableMappingResult">
+     SELECT
+         e.`jobtask_name` taskName
+          ,a.id,a.create_time
+          ,a.modify_time
+          ,a.valid_flag
+          ,b.db_table sourceTable
+          ,c.db_name sourceDbName
+          ,c.db_ip sourceDbIp
+          ,c.db_port sourceDbPort
+          ,c.db_desc sourceDb
+          ,c.db_user sourceUser
+          ,c.db_id sourceDbId
+          ,d.db_desc destDb
+          ,d.db_name destDbName
+          ,d.db_ip destDbIp
+          ,d.db_port destDbPort
+          ,d.db_user destUser
+          ,d.db_id destDbId
+          ,f.db_table destTable
+          ,g.gather_desc gatherDesc
+          ,i.job_id jobId
+          ,i.job_name jobName
+          FROM ex_table_mapping a
+          LEFT JOIN ex_job_task e ON e.`tbmap_id`=a.`id`
+           LEFT JOIN ex_db_mapping h ON h.id=e.`dbmap_id`
+          LEFT JOIN ex_table_dict b ON b.`sync_id`=a.`source_syncid`
+          LEFT JOIN ex_db_dict c ON c.`db_id`=h.source_dbid
+          LEFT JOIN ex_db_dict d ON d.db_id=h.dest_dbid
+          LEFT JOIN ex_table_dict f ON f.sync_id=a.`dest_syncid`
+          LEFT JOIN ex_gather_dict g ON g.gather_id=h.gather_id
+          LEFT JOIN ex_job_info i on i.job_id=e.job_id
+       where e.jobtask_id=#{id}
+    </select>
+    <update id="updateInfo">
+        UPDATE ex_db_mapping a,ex_table_mapping b SET
+         a.source_dbid=(SELECT db_id FROM ex_db_dict WHERE db_desc=#{tableMappingResult.sourceDb}),
+         a.dest_dbid=(SELECT db_id FROM ex_db_dict WHERE db_desc=#{tableMappingResult.destDb}),
+         b.source_syncid=(SELECT sync_id FROM ex_table_dict WHERE db_table=#{tableMappingResult.sourceTable}),
+         b.dest_syncid=(SELECT sync_id FROM ex_table_dict WHERE db_table=#{tableMappingResult.destTable}),
+        b.modify_time=#{tableMappingResult.modifyTime},
+        b.task_name=#{tableMappingResult.taskName}
+    </update>
+    <select id="getTableId" resultType="java.lang.Integer">
+        select dest_syncid from ex_table_mapping where task_name=#{taskName}
+    </select>
+    <delete id="removeTask">
+        DELETE from ex_job_task where tbmap_id in #{integers}
+    </delete>
+    <select id="getDbId" resultType="java.lang.Integer">
+        select db_id from ex_db_dict where db_name=#{db} and db_ip=#{ip} and db_port=#{port} and db_user=#{user}
+    </select>
+    <select id="getTotle" resultType="java.lang.Integer">
+          SELECT
+         count(*)
+          FROM ex_table_mapping a
+          LEFT JOIN ex_job_task b ON b.tbmap_id=a.`id`
+          LEFT JOIN ex_table_dict e ON a.source_syncid=e.sync_id
+          LEFT JOIN ex_table_dict f ON a.`dest_syncid`=f.sync_id
+          LEFT JOIN ex_db_dict c ON c.`db_id`=e.db_id
+          LEFT JOIN ex_db_dict d ON d.db_id=f.db_id
+          LEFT JOIN ex_swapdata_dict g ON g.sourcedb_id=c.`db_id`
+          AND g.destdb_id=(SELECT cc.db_id FROM ex_table_dict aa LEFT JOIN ex_db_dict cc ON aa.db_id = cc.db_id WHERE  aa.sync_id = a.dest_syncid)
+          AND g.source_name=e.db_table
+          AND dest_name=(SELECT bb.db_table FROM ex_table_mapping aa LEFT JOIN ex_table_dict bb ON aa.dest_syncid = bb.sync_id WHERE  aa.id = a.id)
+          WHERE a.`id`=#{id}
+    </select>
+</mapper>

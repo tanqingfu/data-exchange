@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdy.dataexchange.biz.mapper.InsertFlagMapper">
+    <select id="getGatherId" resultType="java.lang.Integer">
+        select gather_id from ex_db_mapping where source_dbid=#{leftDbId} and dest_dbid=#{rightDbId}
+    </select>
+    <update id="updateExDbMapping">
+        update ex_db_mapping set valid_flag=#{valid} where gather_id=#{gatherId} and source_dbid=#{sourceDbId} AND dest_dbid=#{destDbId}
+    </update>
+    <select id="getSyncId" resultType="java.lang.Integer">
+        select sync_id from ex_table_dict where db_id=#{dbId} and db_table=#{tableName}
+    </select>
+    <select id="getId" resultType="java.lang.Integer">
+        select id from ex_table_mapping where source_syncid=#{leftSyncId} and dest_syncid=#{rightSyncId}
+    </select>
+    <update id="updateExTableMapping">
+        update ex_table_mapping set valid_flag=#{valid} where id=#{tableMappingId}
+    </update>
+    <select id="getSyncField" resultType="java.lang.String">
+        select sync_field from ex_field_dict where sync_id=#{syncId}
+    </select>
+</mapper>

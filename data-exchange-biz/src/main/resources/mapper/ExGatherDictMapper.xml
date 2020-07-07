@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdy.dataexchange.biz.mapper.ExGatherDictMapper">
+<select id="getInfo" resultType="com.sdy.dataexchange.biz.model.GatherDictResult">
+    SELECT
+         gather_id gatherid
+        ,gather_desc gatherDesc
+        ,service_ip serviceIp
+         ,service_desc serviceDesc
+         ,gather_path gatherPath
+         ,ssh_port sshPort
+         ,ssh_user sshUser
+         FROM ex_gather_dict
+        where gather_desc=#{gatherDesc}
+        order by gather_id desc
+</select>
+    <select id="getGatherInfo" resultType="com.sdy.dataexchange.biz.model.GatherDictResult">
+       SELECT
+       gather_id gatherid
+       ,gather_desc gatherDesc
+       ,service_ip serviceIp
+       ,service_desc serviceDesc
+       ,gather_path gatherPath
+       ,ssh_port sshPort
+       ,ssh_user sshUser
+         FROM ex_gather_dict
+         order by gather_id desc
+    </select>
+    <select id="getTotle" resultType="java.lang.Integer">
+        select count(*)
+        FROM ex_gather_dict
+    </select>
+    <select id="getOneInfo" resultType="com.sdy.dataexchange.biz.model.GatherDictResult">
+        SELECT
+        gather_id gatherid
+        ,gather_desc gatherDesc
+        ,service_ip serviceIp
+        ,service_desc serviceDesc
+         ,gather_path gatherPath
+         ,ssh_port sshPort
+         ,ssh_user sshUser
+         FROM ex_gather_dict WHERE gather_id=#{gatherId}
+    </select>
+    <insert id="saveGather">
+        insert into  ex_gather_dict (gather_desc) values(gatherDesc)
+    </insert>
+    <insert id="saveDbMapping">
+        insert into ex_db_mapping
+        (gather_id,
+        source_dbid,
+        dest_dbid,
+        create_time)
+        values(
+        #{gatherDictResult.gatherId},
+        #{gatherDictResult.sourceDb},
+        #{gatherDictResult.destDb},
+        #{gatherDictResult.createTime}
+        )
+    </insert>
+    <update id="updateInfo">
+        update ex_gather_dict SET
+        gather_desc=#{exGatherDict.gatherDesc},
+        service_ip=#{exGatherDict.serviceIp},
+        service_desc=#{exGatherDict.serviceDesc},
+        sshPassword=#{exGatherDict.sshPassword},
+        sshPort=#{exGatherDict.sshPort},
+        ssh_user=#{exGatherDict.sshUser}
+        where gather_id=#{exGatherDict.gatherId}
+    </update>
+    <select id="getDbInfo" resultType="com.sdy.dataexchange.biz.model.ExDbDict">
+        select
+        db_id
+        ,db_desc
+        ,db_ip
+        ,db_port
+        ,db_user
+        ,db_passwd
+        ,db_name
+        ,db_type
+        ,source_or_dest
+        ,organization_id
+        ,syncdb_id
+        from ex_db_dict where db_id=#{dbId}
+    </select>
+    <select id="getGatherIdByGatherDesc" resultType="java.lang.Integer">
+        select gather_id from ex_gather_dict where
+        gather_desc=#{gatherDesc}
+    </select>
+    <insert id="insertIntoExGatherDict">
+        insert into ex_gather_dict (
+        gather_desc
+        ,service_ip
+        ,service_desc
+        ,gather_path
+        ,ssh_password
+        ,ssh_port
+        ,ssh_user
+        ) values (
+        #{gatherDesc}
+        ,#{serviceIp}
+        ,#{serviceDesc}
+        ,#{gatherPath}
+        ,#{sshPassword}
+        ,#{sshPort}
+        ,#{sshUser}
+        )
+    </insert>
+    <select id="getGatherId" resultType="java.lang.String">
+        SELECT gather_id FROM ex_db_mapping WHERE source_dbid=(SELECT db_id FROM ex_db_dict WHERE db_desc=#{sourceDesc})
+        AND dest_dbid=(SELECT db_id FROM ex_db_dict WHERE db_desc=#{destDesc})
+    </select>
+    <select id="getAllGatherPage" resultType="com.sdy.dataexchange.biz.model.GatherDictResult">
+        SELECT
+        a.gather_id gatherId
+        ,b.source_dbid sourceDbid
+        ,b.dest_dbid destDbid
+        ,a.gather_desc gatherDesc
+        ,c.db_desc sourceDb
+        ,d.db_desc destDb
+        ,b.create_time createTime
+        ,b.modify_time modifyTime
+        ,b.valid_flag validFlag,b.id id
+        FROM ex_db_mapping b
+        LEFT JOIN ex_gather_dict a ON a.gather_id = b.gather_id
+        LEFT JOIN ex_db_dict c ON b.source_dbid = c.db_id
+        LEFT JOIN ex_db_dict d ON d.db_id=b.`dest_dbid`
+    </select>
+    <select id="getAllGather" resultType="java.util.Map">
+        SELECT
+        gather_id gatherId
+        ,gather_desc gatherDesc
+        from ex_gather_dict
+    </select>
+</mapper>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdy.dataexchange.biz.mapper.ExDbDictMapper">
+<select id="getOneInfo" resultType="com.sdy.dataexchange.biz.model.DbDetails">
+      SELECT  a.db_id,
+       a.db_desc ,
+       a.db_ip,
+       a.db_port,
+       a.db_user,
+       a.db_name,
+       a.db_type,
+       a.db_passwd,
+       b.orgdb_desc,
+       b.org_id,
+       c.syncdb_id syncdbId,
+       c.syncdb_name syncdbName,
+       c.syncdb_ip syncdbIp,
+       c.syncdb_user syncdbUser,
+       c.syncdb_port syncdbPort,
+       c.sync_desc syncDesc
+       FROM ex_db_dict a
+       LEFT JOIN ex_orgdb_mapping b ON a.`db_id`=b.`db_id`
+       left join ex_syncmon_userinfo c on c.syncdb_id=a.syncdb_id
+       WHERE  a.db_id= #{dbId}
+</select>
+   <select id="getDbIdByDesc" resultType="java.lang.CharSequence">
+      select db_id from ex_db_dict where db_desc=#{dbDesc}
+   </select>
+    <update id="updateDbInfo">
+        UPDATE ex_db_dict a,ex_orgdb_mapping b SET
+        a.db_desc=#{dbDesc},
+        a.`db_ip`=#{dbIp},
+        a.`db_port`=#{dbPort},
+        a.`db_user`=#{dbUser},
+        a.`db_passwd`=#{dbPasswd},
+        a.`db_name`=#{dbName},
+        a.`db_type`=#{dbType},
+        a.`organization_id`=#{office},
+        a.syncdb_id =#{userInfo},
+        b.`org_id`=#{office},
+        b.`orgdb_desc`=#{name}
+        WHERE a.`db_id`=#{dbId} and b.db_id=#{dbId}
+    </update>
+    <select id="getTotle" resultType="java.lang.Integer">
+        select count(*)
+        from ex_db_dict
+    </select>
+    <select id="getDb" resultType="com.sdy.dataexchange.biz.model.DbDetails">
+          SELECT  a.db_id,
+       a.db_desc ,
+       a.db_ip,
+       a.db_port,
+       a.db_user,
+       a.db_name,
+       a.db_type,
+       b.orgdb_desc,
+       b.org_id,
+       c.syncdb_id syncdbId,
+       c.syncdb_name syncdbName,
+       c.syncdb_ip syncdbIp,
+       c.syncdb_user syncdbUser,
+       c.syncdb_port syncdbPort,
+       c.sync_desc syncDesc
+       FROM ex_db_dict a
+       LEFT JOIN ex_orgdb_mapping b ON a.`db_id`=b.`db_id`
+       left join ex_syncmon_userinfo c on c.syncdb_id=a.syncdb_id
+       order by a.db_id desc
+    </select>
+
+    <insert id="addDb">
+        insert into ex_db_dict (
+        db_desc,
+        db_ip,
+        db_port,
+        db_user,
+        db_passwd,
+        db_name,
+        db_type,
+        organization_id,
+        syncdb_id
+        )values(
+        #{dbDesc},
+        #{dbIp},
+        #{dbPort},
+        #{dbUser},
+        #{dbPasswd},
+        #{dbName},
+        #{dbType},
+        #{office},
+        #{userInfo}
+        )
+    </insert>
+    <select id="getAllInfo" resultType="java.lang.String">
+        SELECT T2.org_name
+        FROM (
+        SELECT
+        @r AS _code,
+        (SELECT @r := org_parentid FROM ex_organization_dict WHERE org_id = _code) AS parent_id,
+        @l := @l + 1 AS lvl
+        FROM
+        (SELECT @r := #{id}, @l := 0) vars,
+        ex_organization_dict h
+        WHERE @r &lt;&gt; 0) T1
+        JOIN ex_organization_dict T2
+        ON T1._code = T2.org_id
+        ORDER BY T1.lvl DESC
+    </select>
+    <select id="getOrgId" resultType="java.lang.Integer">
+        select org_id from ex_orgdb_mapping where db_id=#{office}
+    </select>
+    <select id="getDbId" resultType="java.lang.Integer">
+        select db_id from ex_db_dict where
+        db_ip=#{dbIp} and
+        db_port=#{dbPort}
+    </select>
+    <insert id="insertIntoOrgDbMapping">
+        insert into ex_orgdb_mapping (org_id,db_id,orgdb_desc)
+        values(
+        #{office},
+        #{dbId},
+        #{name}
+        )
+    </insert>
+    <select id="getAllDbDesc" resultType="java.lang.String">
+        select db_desc from ex_db_dict
+    </select>
+    <select id="getIpAndPortByDbDesc" resultType="java.util.Map">
+        select db_id dbId,db_ip dbIp,db_port dbPort from ex_db_dict where db_desc=#{dbDesc}
+    </select>
+    <select id="getDbIdBbDescIpPort" resultType="java.lang.Integer">
+        select db_id from ex_db_dict where
+        db_ip=#{dbIp} and
+        db_port=#{dbPort}
+    </select>
+    <select id="getSyncIds" resultType="java.lang.Integer">
+        select sync_id from ex_table_dict where
+        db_id=#{dbId} and db_table=#{text}
+    </select>
+    <select id="getInfo" resultType="java.lang.String">
+        select orgdb_desc from ex_orgdb_mapping where db_id=#{dbId}
+    </select>
+    <select id="getAllDatabases" resultType="java.util.Map">
+        SELECT
+        DISTINCT
+        a.db_id dbId,
+        a.db_desc dbDesc,
+        a.db_ip dbIp,
+        a.db_port dbPort,
+        a.db_user dbUser,
+        a.db_name dbName,
+        a.db_type dbType,
+        a.syncdb_id syncdbId
+        FROM ex_db_dict a
+    </select>
+    <select id="getDbByDesc" resultType="java.util.Map">
+        SELECT a.source_dbid sourceDbid,a.dest_dbid destDbid,c.db_desc sourceDb, d.db_desc destDb
+        FROM ex_db_mapping a LEFT JOIN ex_gather_dict b ON a.gather_id=b.gather_id
+        LEFT JOIN ex_db_dict c ON c.db_id=a.source_dbid
+        LEFT JOIN ex_db_dict d ON d.db_id=a.`dest_dbid` WHERE b.gather_desc=#{gatherDesc}
+    </select>
+    <select id="getDbInfo" resultType="com.sdy.dataexchange.biz.model.ExDbDict">
+        select
+        db_id
+        ,db_desc
+        ,db_ip
+        ,db_port
+        ,db_user
+        ,db_name
+        ,db_type
+        ,source_or_dest
+        ,organization_id
+        from ex_db_dict where db_id=#{dbId}
+    </select>
+    <select id="getDbByGatherDesc" resultType="java.util.Map">
+        SELECT DISTINCT
+        a.source_dbid sourceDbId
+        ,c.`db_desc` sourceDb
+        ,c.db_name sourceDbName
+        ,c.db_ip sourceIp
+        ,c.db_port sourcePort
+        ,c.db_user sourceUser
+        FROM ex_db_mapping a
+        LEFT JOIN ex_gather_dict b ON a.gather_id=b.gather_id
+        LEFT JOIN ex_db_dict c ON c.db_id=a.source_dbid WHERE b.gather_id= #{gatherDesc} AND a.`gather_id`= #{gatherDesc}
+    </select>
+    <select id="getUserByDbDesc" resultType="java.lang.String">
+        select db_user from ex_db_dict where db_desc=#{dbDesc}
+    </select>
+    <select id="getTotleByName" resultType="java.lang.Integer">
+        select count(*) from ex_db_dict where db_name=#{dbName}
+    </select>
+</mapper>

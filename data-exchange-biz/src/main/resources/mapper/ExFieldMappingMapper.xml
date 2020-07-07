@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdy.dataexchange.biz.mapper.ExFieldMappingMapper">
+    <select id="getMapping" resultType="com.sdy.dataexchange.biz.model.FieldMappingResult">
+        SELECT
+        a.id
+        ,b.db_table sourceTable
+        ,a.source_syncname
+        ,a.source_func
+        ,c.db_table destTable
+        ,a.dest_syncname
+        ,a.dest_func,a.valid_flag
+        FROM ex_field_mapping a
+        LEFT JOIN ex_table_dict b ON a.`source_syncid`=b.`sync_id`
+        LEFT JOIN ex_table_dict c ON a.`dest_syncid`=c.sync_id
+        limit #{startIndex},#{pageSize}
+    </select>
+
+    <select id="getInfo" resultType="com.sdy.dataexchange.biz.model.FieldMappingResult">
+         SELECT
+        a.id
+        ,b.db_table sourceTable
+        ,a.source_syncname
+        ,a.source_func
+        ,c.db_table destTable
+        ,a.dest_syncname
+        ,a.dest_func,a.valid_flag
+        FROM ex_field_mapping a
+        LEFT JOIN ex_table_dict b ON a.`source_syncid`=b.`sync_id`
+        LEFT JOIN ex_table_dict c ON a.`dest_syncid`=c.sync_id AND a.id=#{id}
+    </select>
+    <select id="getExFieldMapping" resultType="com.sdy.dataexchange.biz.model.ExFieldMapping">
+        select
+        id
+        ,source_syncid
+        ,source_syncname
+        ,source_func
+        ,dest_syncid
+        ,dest_syncname
+        ,dest_func
+        ,valid_flag
+        from ex_field_mapping where source_syncid=#{sourceTableId}
+    </select>
+    <select id="getFieldName" resultType="java.lang.String">
+        select db_table from ex_table_dict where sync_id=#{syncid}
+    </select>
+</mapper>

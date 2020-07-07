@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdy.dataexchange.biz.mapper.ShowInfoMapper">
+    <select id="getSyncId" resultType="java.util.Map">
+        SELECT ex_table_dict.sync_id
+        ,ex_table_mapping.dest_syncid
+        ,ex_table_mapping.create_time
+        FROM ex_table_dict,ex_table_mapping
+        WHERE ex_table_mapping.source_syncid=(SELECT sync_id FROM ex_table_dict WHERE db_id=#{dbId} AND db_table=#{dbTable})
+        AND ex_table_dict.db_id=#{dbId} AND ex_table_dict.db_table=#{dbTable}
+    </select>
+    <select id="getSyncSeqno" resultType="java.lang.Integer">
+        select sync_seqno from ex_field_dict where sync_id=#{syncId} and sync_field=#{syncField}
+    </select>
+    <select id="getCreateTime" resultType="java.util.Map">
+        select source_syncid,
+        dest_syncid,create_time from ex_table_mapping
+    </select>
+    <select id="getSyncIds" resultType="java.util.Map">
+        select sync_id,db_table from ex_table_dict where db_id=#{destDbid}
+    </select>
+</mapper>
