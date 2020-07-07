@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" addBOMForNewFiles="with NO BOM">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-exchange-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-exchange-biz" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-exchange-core" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-exchange-gen" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-exchange-mq" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-exchange-plugin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-exchange-task" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-exchange-web" charset="UTF-8" />
+  </component>
+</project>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="data-exchange-api" />
+        <module name="data-exchange-biz" />
+        <module name="data-exchange-core" />
+        <module name="data-exchange-gen" />
+        <module name="data-exchange-mq" />
+        <module name="data-exchange-plugin" />
+        <module name="data-exchange-task" />
+        <module name="data-exchange-web" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="data-exchange" target="1.8" />
+      <module name="data-exchange-api" target="1.8" />
+      <module name="data-exchange-biz" target="1.8" />
+      <module name="data-exchange-core" target="1.8" />
+      <module name="data-exchange-gen" target="1.8" />
+      <module name="data-exchange-mq" target="1.8" />
+      <module name="data-exchange-plugin" target="1.8" />
+      <module name="data-exchange-task" target="1.8" />
+      <module name="data-exchange-web" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="data-exchange-api" options="-parameters" />
+      <module name="data-exchange-biz" options="-parameters" />
+      <module name="data-exchange-core" options="-parameters" />
+      <module name="data-exchange-gen" options="-parameters" />
+      <module name="data-exchange-mq" options="-parameters" />
+      <module name="data-exchange-plugin" options="-parameters" />
+      <module name="data-exchange-task" options="-parameters" />
+      <module name="data-exchange-web" options="-parameters" />
+    </option>
+  </component>
+</project>

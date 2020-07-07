@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/data-exchange.iml" filepath="$PROJECT_DIR$/data-exchange.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-exchange-api/data-exchange-api.iml" filepath="$PROJECT_DIR$/data-exchange-api/data-exchange-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-exchange-biz/data-exchange-biz.iml" filepath="$PROJECT_DIR$/data-exchange-biz/data-exchange-biz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-exchange-core/data-exchange-core.iml" filepath="$PROJECT_DIR$/data-exchange-core/data-exchange-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-exchange-gen/data-exchange-gen.iml" filepath="$PROJECT_DIR$/data-exchange-gen/data-exchange-gen.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-exchange-mq/data-exchange-mq.iml" filepath="$PROJECT_DIR$/data-exchange-mq/data-exchange-mq.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-exchange-plugin/data-exchange-plugin.iml" filepath="$PROJECT_DIR$/data-exchange-plugin/data-exchange-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-exchange-task/data-exchange-task.iml" filepath="$PROJECT_DIR$/data-exchange-task/data-exchange-task.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-exchange-web/data-exchange-web.iml" filepath="$PROJECT_DIR$/data-exchange-web/data-exchange-web.iml" />
+    </modules>
+  </component>
+</project>
